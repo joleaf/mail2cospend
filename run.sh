@@ -1,0 +1,1 @@
+docker run --restart=always --env-file=.env -it -d -v rewecospendV:/app/data --name=rewecospend rewecospend
