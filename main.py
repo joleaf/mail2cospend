@@ -29,8 +29,8 @@ def run():
     config = load_config()
     while 1:
         imap = None
-        # Try to open a connection 5 times
-        tries = 5
+        # Try to open a connection x times
+        tries = 8
         for i in range(tries):
             try:
                 imap = connect_imap(config)
@@ -41,10 +41,20 @@ def run():
                 logging.error(f"Waiting {seconds_to_wait} seconds for the next try.")
                 sleep(seconds_to_wait)
                 if i == tries - 1:
-                    return
+                    exit(1)
         new_rewe_bons = search_rewe_ebons(imap, config)
         imap.close()
-        publish_rewe_bons(new_rewe_bons, config)
+        for i in range(tries):
+            try:
+                publish_rewe_bons(new_rewe_bons, config)
+                break
+            except:
+                logging.error("No connection to the cospend server.")
+                seconds_to_wait = config['interval'] * 2 ** i
+                logging.error(f"Waiting {seconds_to_wait} seconds for the next try.")
+                sleep(seconds_to_wait)
+                if i == tries - 1:
+                    exit(1)
         sleep(config['interval'])
 
 
