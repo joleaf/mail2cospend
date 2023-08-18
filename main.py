@@ -88,6 +88,7 @@ def search_rewe_ebons(imap, config) -> List[ReweBonSummary]:
         since = datetime.datetime.today().strftime("%d-%b-%Y")
 
     search_query = f'(SUBJECT "REWE eBon") (SINCE {since})'
+    logging.info("Requesting Rewe eBons from the mail server")
     logging.debug(f"Search for: {search_query}")
     imap.select("Inbox")
     tmp, data = imap.search(None, search_query)
@@ -170,6 +171,7 @@ def publish_rewe_bons(rewe_bons: List[ReweBonSummary], config):
     if len(rewe_bons) > 0:
         logging.info(f"Found {len(rewe_bons)} bons")
     for rewe_bon in rewe_bons:
+        logging.info(f"Pushing new bill: {rewe_bon}")
         url = 'https://cloud.jb-services.de/index.php/apps/cospend/api/projects/015f4519b2025896bbdfaf55702299cb/no-pass/bills'
         data = {
             'amount': rewe_bon.sum,
@@ -181,7 +183,6 @@ def publish_rewe_bons(rewe_bons: List[ReweBonSummary], config):
             'paymentmodeid': 1,
             'comment': 'Rewe Autopush - Beleg: ' + rewe_bon.beleg
         }
-        logging.info(f"Pushing new bill: {rewe_bon}")
         logging.debug(str(data))
         result = requests.post(url, json=data)
         if result.status_code < 400:
