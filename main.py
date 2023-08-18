@@ -28,11 +28,20 @@ class ReweBonSummary:
 def run():
     config = load_config()
     while 1:
-        try:
-            imap = connect_imap(config)
-        except:
-            logging.error("No connection to the imap server.")
-            return
+        imap = None
+        # Try to open a connection 5 times
+        tries = 5
+        for i in range(tries):
+            try:
+                imap = connect_imap(config)
+                break
+            except:
+                logging.error("No connection to the imap server.")
+                seconds_to_wait = config['interval'] * 2 ** i
+                logging.error(f"Waiting {seconds_to_wait} seconds for the next try.")
+                sleep(seconds_to_wait)
+                if i == tries - 1:
+                    return
         new_rewe_bons = search_rewe_ebons(imap, config)
         imap.close()
         publish_rewe_bons(new_rewe_bons, config)
