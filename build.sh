@@ -1,1 +1,1 @@
-docker build . -t rewecospend
+docker build . -t mail2cospend
