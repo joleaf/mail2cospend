@@ -46,7 +46,7 @@ def run():
                 if i == tries - 1:
                     exit(1)
         bons = list()
-        #bons += search_rewe_ebons(imap, config)
+        bons += search_rewe_ebons(imap, config)
         
         bons += search_picnic_ebons(imap, config)
         
@@ -168,22 +168,17 @@ def parse_pdf_to_rewe_bon_summary(filename) -> Optional[BonSummary]:
                for page in pdf.pages
                for l in page.extract_text().split("\n")
                if "SUMME" in l][0]
-        day, month, year = map(int, [l.replace("Datum:", "").strip()
-                                     for page in pdf.pages
-                                     for l in page.extract_text().split("\n")
-                                     if "Datum:" in l][0].split("."))
-        hour, minute, second = map(int, [l.replace("Uhrzeit:", "").replace("Uhr", "").strip()
-                                         for page in pdf.pages
-                                         for l in page.extract_text().split("\n")
-                                         if "Uhrzeit:" in l][0].split(":"))
-        beleg = [l.replace("Beleg-Nr.", "").strip()
+        datarow = [l.strip().split("     ")
                  for page in pdf.pages
                  for l in page.extract_text().split("\n")
-                 if "Beleg-Nr." in l][0]
-        timestamp = datetime.datetime(year=year, month=month, day=day, hour=hour, minute=minute,
-                                      second=second)
+                 if "Bon-Nr." in l][0]
+        day, month, year = map(int, datarow[0].split("."))
+        hour, minute = map(int, datarow[1].split(":"))
+        beleg = datarow[2]
+        timestamp = datetime.datetime(year=year, month=month, day=day, hour=hour, minute=minute)
 
-        return BonSummary(sum=sum, beleg=beleg, timestamp=timestamp, type="Rewe")
+        bon = BonSummary(sum=sum, beleg=beleg, timestamp=timestamp, type="Rewe")
+        return bon
     except:
         return None
 
@@ -222,7 +217,6 @@ def publish_bons(bons: List[BonSummary], config):
         }
         logging.debug(str(data))
         result = requests.post(url, json=data)
-        print(result)
         if result.status_code < 400:
             logging.debug("Add to published file")
             add_published_id(bon)

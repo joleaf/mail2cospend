@@ -1,6 +1,6 @@
 # rewecospend
 
-Personal Rewe (IMAP-MAIL-PDF-COSPEND) workflow
+Personal eBon to Cospend workflow
 
 ## Install requirements
 
