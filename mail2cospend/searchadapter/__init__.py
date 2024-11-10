@@ -1,6 +1,6 @@
 import logging
-#from .rewe import ReweSearchAdapter
-#from .picnic import PicnicSearchAdapter
+from .rewe import ReweSearchAdapter
+from .picnic import PicnicSearchAdapter
 from .netto import NettoSearchAdapter
 from .searchadapter import SearchAdapter
 
