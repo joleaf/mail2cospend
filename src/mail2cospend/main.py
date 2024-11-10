@@ -16,7 +16,9 @@ def run(dry=False):
                         datefmt='%m/%d/%Y %I:%M:%S %p',
                         level=config.loglevel)
 
-    logging.debug(f"Loaded search adapters: {", ".join(adapter.adapter_name() for adapter in all_search_adapters)}")
+    logging.debug(f"Loaded search adapters: ")
+    for adapter in all_search_adapters:
+        logging.debug(f"  - {adapter.adapter_name()}")
 
     while not exit_event.is_set():
         imap = get_imap_connection(config)
