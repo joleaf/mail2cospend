@@ -1,6 +1,5 @@
 import dataclasses
 import datetime
-import logging
 import os
 
 from dotenv import load_dotenv
@@ -8,6 +7,7 @@ from dotenv import load_dotenv
 
 @dataclasses.dataclass(frozen=True)
 class Config:
+    loglevel: str
     cospend_project_url: str
     cospend_payed_for: str
     cospend_payer: str
@@ -17,6 +17,7 @@ class Config:
     imap_user: str
     imap_password: str
     imap_inbox: str
+    imap_port: int
     interval: int
     since: str
 
@@ -31,6 +32,7 @@ class Config:
 def load_config() -> Config:
     load_dotenv()
     config = Config(
+        loglevel=(os.environ.get('LOGLEVEL') or "INFO").upper(),
         cospend_project_url=os.environ.get('COSPEND_PROJECT_URL'),
         cospend_payed_for=os.environ.get('COSPEND_PAYED_FOR') or "1",
         cospend_payer=os.environ.get('COSPEND_PAYER') or "1",
@@ -40,6 +42,7 @@ def load_config() -> Config:
         imap_user=os.environ.get('IMAP_USER'),
         imap_password=os.environ.get('IMAP_PASSWORD'),
         imap_inbox=os.environ.get('IMAP_INBOX') or 'Inbox',
+        imap_port=os.environ.get('IMAP_PORT') or 993,
         interval=int(os.environ.get('INTERVAL')) or 60,
         since=os.environ.get('SINCE') or 'today'
     )

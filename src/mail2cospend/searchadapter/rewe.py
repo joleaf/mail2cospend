@@ -1,5 +1,4 @@
 import datetime
-from abc import ABC
 from typing import Iterable, Optional
 
 from PyPDF2 import PdfReader
@@ -47,8 +46,6 @@ class ReweSearchAdapter(SearchAdapter):
         bon = BonSummary(sum=sum, beleg=beleg, timestamp=timestamp, type="Rewe")
         return bon
 
-    def _get_bon_from_plain_text(self, payload: Iterable[str], email_timestamp: datetime) -> Optional[BonSummary]:
-        return None
-
-    def _get_bon_from_html_text(self, payload: Iterable[str], email_timestamp: datetime) -> Optional[BonSummary]:
+    def _get_bon_from_text(self, payload: Iterable[str], email_timestamp: datetime, is_html: bool) -> Optional[
+        BonSummary]:
         return None

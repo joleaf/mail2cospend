@@ -1,12 +1,21 @@
 [project]
-name = "rewecospend"
-version = "0.1.0"
-description = "Add your description here"
+name = "mail2cospend"
+version = "0.2.0"
+description = "Send summaries of eBons (Rewe, Netto, ..) to cospend."
 readme = "README.md"
+license = { file = "LICENSE" }
 requires-python = ">=3.12"
 dependencies = [
+    "click>=8.1.7",
     "pypdf2>=3.0.1",
     "python-dotenv>=1.0.1",
     "pyyaml>=6.0.2",
     "requests>=2.32.3",
 ]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project.scripts]
+mail2cospend = "mail2cospend:cli"

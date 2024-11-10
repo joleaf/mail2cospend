@@ -9,8 +9,9 @@ def _try_connect_imap(config) -> imaplib.IMAP4_SSL:
     imap_host = config.imap_host
     imap_user = config.imap_user
     imap_pass = config.imap_password
+    imap_port = config.imap_port
     # connect to host using SSL
-    imap = imaplib.IMAP4_SSL(imap_host)
+    imap = imaplib.IMAP4_SSL(imap_host, imap_port)
     # login to server
     imap.login(imap_user, imap_pass)
     return imap

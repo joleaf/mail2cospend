@@ -2,7 +2,7 @@ import dataclasses
 from datetime import datetime
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class BonSummary:
     timestamp: datetime
     sum: float
@@ -10,4 +10,4 @@ class BonSummary:
     type: str
 
     def get_id(self):
-        return self.type + "_" + self.timestamp.isoformat()
+        return self.type + "_" + self.timestamp.isoformat() + "_" + self.beleg

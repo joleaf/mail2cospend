@@ -45,11 +45,11 @@ def _try_publish_bons(bons: List[BonSummary], config: Config):
             'paymentmodeid': config.cospend_paymentmodeid_default,
             'comment': bon.type + ' - Autopush - Beleg: ' + bon.beleg
         }
-        logging.debug(f"Sending data: {str(data)}")
+        logging.debug(f"Sending data: {str(data)} to url {url}")
         result = requests.post(url, json=data)
         if result.status_code < 400:
-            logging.debug("Add bon {bon} to published file")
             add_published_id(bon)
+            logging.debug(f"Published bon {bon} and added to published file")
         else:
-            logging.warning("Bon {bon} was not published to cospend!")
+            logging.warning(f"Bon {bon} was not published to cospend!")
             logging.warning(f"{result.status_code}: {result.reason}")

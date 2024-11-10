@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Iterable, Optional, overload, override
+from typing import Iterable, Optional
 
 from PyPDF2 import PdfReader
 
@@ -32,14 +32,12 @@ class PicnicSearchAdapter(SearchAdapter):
     def _get_bon_from_pdf(self, pdf: PdfReader, email_timestamp: datetime) -> Optional[BonSummary]:
         return False
 
-    def _get_bon_from_plain_text(self, payload: Iterable[str], email_timestamp: datetime) -> Optional[BonSummary]:
+    def _get_bon_from_text(self, payload: Iterable[str], email_timestamp: datetime, is_html: bool) -> Optional[
+        BonSummary]:
         sum = 0
         # beleg = payload[1] + " " + payload[5]
         for row in payload:
             if "Gesamtbetrag" in row:
                 sum = float(row.split()[1].replace("..", "."))
-        bon = BonSummary(sum=sum, beleg="", timestamp=email_timestamp, type="PicNic")
+        bon = BonSummary(sum=sum, beleg="", timestamp=email_timestamp, type="Picnic")
         return bon
-
-    def _get_bon_from_html_text(self, payload: Iterable[str], email_timestamp: datetime) -> Optional[BonSummary]:
-        return None

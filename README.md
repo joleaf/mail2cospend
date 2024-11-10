@@ -1,6 +1,7 @@
-# rewecospend
+# Mail2Cospend
 
-Personal eBon to Cospend workflow, uses [uv](https://github.com/astral-sh/uv).
+Personal eBons from mail to Cospend (Nextcloud) workflow.
+Uses [uv](https://github.com/astral-sh/uv) for Python project management.
 
 ## Install requirements
 
@@ -9,15 +10,43 @@ uv sync
 uv lock
 ```
 
-## Run with python > 3.11
+## Run with Python >= 3.12
 
 ```bash
-uv run main.py
+uv run mail2cospend
 ```
 
-## Run with docker
+Use `-dry` to perform a "dry run": only request and parse bon from the mail inbox without publishing them to cospend.
+
+## Run with Docker
 
 ```bash
 ./build.sh
 ./run.sh
 ```
+
+## Implemented adapters
+
+- Rewe
+- Netto
+- Picnic
+
+## Configuration with environment variables
+
+Change them in the [.env](.env) file.
+
+| Variable                      | Description                                                                                                       | Type               |
+|-------------------------------|-------------------------------------------------------------------------------------------------------------------|--------------------|
+| COSPEND_PROJECT_URL           | The url of the cospend project, e.g., 'https://cloud.server.de/index.php/apps/cospend/api/projects/<myprojectid>' | string             |
+| COSPEND_PAYED_FOR             | The ids of the payed for users, seperated by a ","                                                                | string             |
+| COSPEND_PAYER                 | The id of the payer                                                                                               | string             |
+| COSPEND_CATEGORYID_DEFAULT    | The id of the category                                                                                            | int                |
+| COSPEND_PAYMENTMODEID_DEFAULT | The id of the pyment mode                                                                                         | int                |
+| IMAP_HOST                     | The IMAP host                                                                                                     | string             |
+| IMAP_USER                     | The IMAP user                                                                                                     | string             |
+| IMAP_PASSWORD                 | The IMAP password                                                                                                 | string             |
+| IMAP_PORT                     | The IMAP port                                                                                                     | int (default: 993) |
+| IMAP_INBOX                    | 'Inbox' of of the IMAP server                                                                                     | string             |
+| SINCE                         | 'today' or a ISO date, if 'today', then the script will use always the current day                                | str or ISO date    |
+| INTERVAL                      | The request interval in seconds                                                                                   | int                |
+| LOGLEVEL                      | The loglevel (DEBUG,INFO,WARING,ERROR)                                                                            | string             |

@@ -60,12 +60,12 @@ class SearchAdapter(ABC):
             for part in msg.walk():
                 if self._use_html_text_in_mail() and part.get_content_type() == 'text/html':
                     payload = part.get_payload(decode=True).decode('utf-8').split("\r\n")
-                    bon = self._get_bon_from_html_text(payload, email_timestamp)
+                    bon = self._get_bon_from_text(payload, email_timestamp, is_html=True)
                     if bon is None:
                         logging.warning(f"Bon can not be parsed")
                 if self._use_plain_text_in_mail() and part.get_content_type() == 'text/plain':
                     payload = part.get_payload(decode=True).decode('latin-1').split("\r\n")
-                    bon = self._get_bon_from_plain_text(payload, email_timestamp)
+                    bon = self._get_bon_from_text(payload, email_timestamp, is_html=False)
                     if bon is None:
                         logging.warning(f"Bon can not be parsed")
                 if self._use_pdf_in_mail() and part.get_content_type() == 'application/octet-stream':
@@ -103,9 +103,5 @@ class SearchAdapter(ABC):
         return None
 
     @abstractmethod
-    def _get_bon_from_plain_text(self, payload: Iterable[str], email_timestamp: datetime) -> Optional[BonSummary]:
-        return None
-
-    @abstractmethod
-    def _get_bon_from_html_text(self, payload: Iterable[str], email_timestamp: datetime) -> Optional[BonSummary]:
+    def _get_bon_from_text(self, payload: Iterable[str], email_timestamp: datetime, is_html: bool) -> Optional[BonSummary]:
         return None
