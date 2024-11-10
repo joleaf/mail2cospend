@@ -1,17 +1,18 @@
 # rewecospend
 
-Personal eBon to Cospend workflow
+Personal eBon to Cospend workflow, uses [uv](https://github.com/astral-sh/uv).
 
 ## Install requirements
 
 ```shell
-pip install -r requirements.txt
+uv sync
+uv lock
 ```
 
 ## Run with python > 3.11
 
 ```bash
-python main.py
+uv run main.py
 ```
 
 ## Run with docker
