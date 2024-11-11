@@ -62,12 +62,12 @@ class SearchAdapter(ABC):
                     payload = part.get_payload(decode=True).decode('utf-8').split("\r\n")
                     bon = self._get_bon_from_text(payload, email_timestamp, is_html=True)
                     if bon is None:
-                        logging.warning(f"Bon can not be parsed")
+                        logging.warning("Bon can not be parsed")
                 if self._use_plain_text_in_mail() and part.get_content_type() == 'text/plain':
                     payload = part.get_payload(decode=True).decode('latin-1').split("\r\n")
                     bon = self._get_bon_from_text(payload, email_timestamp, is_html=False)
                     if bon is None:
-                        logging.warning(f"Bon can not be parsed")
+                        logging.warning("Bon can not be parsed")
                 if self._use_pdf_in_mail() and part.get_content_type() == 'application/octet-stream':
 
                     # When decode=True, get_payload will return None if part.is_multipart()
@@ -87,7 +87,7 @@ class SearchAdapter(ABC):
                         except:
                             pass
                         if bon is None:
-                            logging.warning(f"Bon can not be parsed")
+                            logging.warning("Bon can not be parsed")
                 if bon is not None:
                     break
             if bon is not None:

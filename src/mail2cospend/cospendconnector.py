@@ -24,7 +24,7 @@ def test_connection(config: Config):
     try:
         result = requests.get(url)
         if result.status_code < 400:
-            logging.debug(f"Tested connection to the cospend project. Successful.")
+            logging.debug("Tested connection to the cospend project. Successful.")
             return True
         else:
             logging.error(f"No connection to the cospend project: {config.cospend_project_url}")
@@ -32,7 +32,7 @@ def test_connection(config: Config):
             return False
     except:
         logging.error(f"No connection to the cospend project: {config.cospend_project_url}")
-        logging.error(f"Unknown error. Check url.")
+        logging.error("Unknown error. Check url.")
         return False
 
 
