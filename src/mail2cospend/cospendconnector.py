@@ -101,7 +101,6 @@ def _get_project_url(config: Config, api_type: ApiType) -> str:
             url += "bills"
         elif api_type == ApiType.INFOS:
             url += "members"
-    print(url)
     return url
 
 
