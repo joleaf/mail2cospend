@@ -86,6 +86,10 @@ def _get_project_url(config: Config, api_type: ApiType) -> str:
     url = config.cospend_project_url
     if not url.endswith("/"):
         url += "/"
+    # Convert the "project" url into the api url
+    if 'api' not in url:
+        url = url.replace("/cospend/s/", "/cospend/api/projects/")
+
     pw = config.cospend_project_password
     if pw is not None and len(pw) > 0:
         if api_type == ApiType.BILLS:
@@ -97,6 +101,7 @@ def _get_project_url(config: Config, api_type: ApiType) -> str:
             url += "bills"
         elif api_type == ApiType.INFOS:
             url += "members"
+    print(url)
     return url
 
 
