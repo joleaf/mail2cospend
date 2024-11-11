@@ -1,5 +1,8 @@
+import dataclasses
 import datetime
+import enum
 import logging
+from dataclasses import field
 from typing import List
 
 import requests
@@ -9,8 +12,15 @@ from mail2cospend.data import BonSummary
 from mail2cospend.helper import add_published_id
 
 
+@dataclasses.dataclass(frozen=True)
+class CospendProjectInfos:
+    categories: List[str] = field(default_factory=list)
+    paymentmodes: List[str] = field(default_factory=list)
+    members: List[str] = field(default_factory=list)
+
+
 def test_connection(config: Config):
-    url = _get_project_url(config)
+    url = _get_project_url(config, ApiType.INFOS)
     try:
         result = requests.get(url)
         if result.status_code < 400:
@@ -24,6 +34,30 @@ def test_connection(config: Config):
         logging.error(f"No connection to the cospend project: {config.cospend_project_url}")
         logging.error(f"Unknown error. Check url.")
         return False
+
+
+def get_cospend_project_infos(config: Config) -> CospendProjectInfos:
+    url = _get_project_url(config, ApiType.INFOS)
+    result = requests.get(url)
+    data = result.json()
+
+    categories = list()
+    for key, val in data["categories"].items():
+        categories.append(f"{key}: {val['name']}")
+
+    paymentmodes = list()
+    for key, val in data["paymentmodes"].items():
+        paymentmodes.append(f"{key}: {val['name']}")
+
+    members = list()
+    for member in data["members"]:
+        members.append(f"{member['id']}: {member['name']}")
+
+    return CospendProjectInfos(
+        categories,
+        paymentmodes,
+        members
+    )
 
 
 def publish_bongs(bons: List[BonSummary], config: Config):
@@ -43,12 +77,26 @@ def publish_bongs(bons: List[BonSummary], config: Config):
                 exit(1)
 
 
-def _get_project_url(config: Config) -> str:
+class ApiType(enum.Enum):
+    BILLS = 1
+    INFOS = 2
+
+
+def _get_project_url(config: Config, api_type: ApiType) -> str:
     url = config.cospend_project_url
     if not url.endswith("/"):
         url += "/"
-    password = config.cospend_project_password or "no-pass"
-    url += f"{password}/bills"
+    pw = config.cospend_project_password
+    if pw is not None and len(pw) > 0:
+        if api_type == ApiType.BILLS:
+            url += f"{pw}/bills"
+        elif api_type == ApiType.INFOS:
+            url += f"{pw}"
+    else:
+        if api_type == ApiType.BILLS:
+            url += "bills"
+        elif api_type == ApiType.INFOS:
+            url += "members"
     return url
 
 
@@ -57,7 +105,7 @@ def _try_publish_bons(bons: List[BonSummary], config: Config):
         logging.info(f"Found {len(bons)} bons")
     for bon in bons:
         logging.info(f"Pushing new bill: {bon}")
-        url = _get_project_url(config)
+        url = _get_project_url(config, ApiType.BILLS)
 
         data = {
             'amount': bon.sum,
