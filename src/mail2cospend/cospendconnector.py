@@ -98,7 +98,7 @@ def _get_project_url(config: Config, api_type: ApiType) -> str:
             url += f"{pw}"
     else:
         if api_type == ApiType.BILLS:
-            url += "bills"
+            url += "no-pass/bills"
         elif api_type == ApiType.INFOS:
             url += "members"
     return url
@@ -113,13 +113,13 @@ def _try_publish_bons(bons: List[BonSummary], config: Config):
 
         data = {
             'amount': bon.sum,
-            'what': bon.type,
-            'payed_for': config.cospend_payed_for,
-            'payer': '3',
+            'what': bon.adapter_name,
+            'payed_for': config.get_cospend_payed_for(bon.adapter_name),
+            'payer': config.get_cospend_payer(bon.adapter_name),
             'timestamp': (bon.timestamp - datetime.datetime(1970, 1, 1)).total_seconds(),
-            'categoryid': config.cospend_categoryid_default,
-            'paymentmodeid': config.cospend_paymentmodeid_default,
-            'comment': bon.type + ' - Autopush - Beleg: ' + bon.beleg
+            'categoryid': config.get_cospend_categoryid(bon.adapter_name),
+            'paymentmodeid': config.get_cospend_paymentmodeid(bon.adapter_name),
+            'comment': bon.adapter_name + ' - Autopush ' + (('- Beleg: ' + bon.beleg) if bon.beleg else '')
         }
         logging.debug(f"Sending data: {str(data)} to url {url}")
         result = requests.post(url, json=data)

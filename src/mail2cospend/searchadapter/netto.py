@@ -11,7 +11,7 @@ class NettoSearchAdapter(SearchAdapter):
 
     @classmethod
     def adapter_name(cls) -> str:
-        return "Netto eBon"
+        return "Netto"
 
     @classmethod
     def _use_pdf_in_mail(cls) -> bool:
@@ -43,5 +43,5 @@ class NettoSearchAdapter(SearchAdapter):
             if found_summe:
                 sum = float(row.split("<b>")[1].split(" ")[0].replace(",", "."))
                 break
-        bon = BonSummary(sum=sum, beleg="", timestamp=email_timestamp, type="Netto")
+        bon = BonSummary(sum=sum, beleg="", timestamp=email_timestamp, adapter_name=self.adapter_name())
         return bon

@@ -11,7 +11,7 @@ class PicnicSearchAdapter(SearchAdapter):
 
     @classmethod
     def adapter_name(cls) -> str:
-        return "Picnic eBon"
+        return "Picnic"
 
     @classmethod
     def _use_pdf_in_mail(cls) -> bool:
@@ -30,7 +30,7 @@ class PicnicSearchAdapter(SearchAdapter):
         return f'(SUBJECT "Dein Bon") (SINCE "{self.config.get_since_for_imap_query()}")'
 
     def _get_bon_from_pdf(self, pdf: PdfReader, email_timestamp: datetime) -> Optional[BonSummary]:
-        return False
+        return None
 
     def _get_bon_from_text(self, payload: Iterable[str], email_timestamp: datetime, is_html: bool) -> Optional[
         BonSummary]:
@@ -39,5 +39,5 @@ class PicnicSearchAdapter(SearchAdapter):
         for row in payload:
             if "Gesamtbetrag" in row:
                 sum = float(row.split()[1].replace("..", "."))
-        bon = BonSummary(sum=sum, beleg="", timestamp=email_timestamp, type="Picnic")
+        bon = BonSummary(sum=sum, beleg="", timestamp=email_timestamp, adapter_name=self.adapter_name())
         return bon

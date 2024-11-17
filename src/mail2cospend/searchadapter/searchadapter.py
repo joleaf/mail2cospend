@@ -1,21 +1,20 @@
 import email
 import imaplib
+import logging
 from abc import ABC, abstractmethod
 from datetime import datetime
 from email import utils
 from typing import List, Optional, Iterable
-import logging
 
 from PyPDF2 import PdfReader
 
-from mail2cospend.config import Config
 from mail2cospend.data import BonSummary
 from mail2cospend.helper import get_published_ids
 
 
 class SearchAdapter(ABC):
 
-    def __init__(self, config: Config, imap: imaplib.IMAP4_SSL):
+    def __init__(self, config, imap: imaplib.IMAP4_SSL):
         self.config = config
         self.imap = imap
 
@@ -103,5 +102,6 @@ class SearchAdapter(ABC):
         return None
 
     @abstractmethod
-    def _get_bon_from_text(self, payload: Iterable[str], email_timestamp: datetime, is_html: bool) -> Optional[BonSummary]:
+    def _get_bon_from_text(self, payload: Iterable[str], email_timestamp: datetime, is_html: bool) -> Optional[
+        BonSummary]:
         return None

@@ -7,7 +7,7 @@ class BonSummary:
     timestamp: datetime
     sum: float
     beleg: str
-    type: str
+    adapter_name: str
 
     def get_id(self):
-        return self.type + "_" + self.timestamp.isoformat() + "_" + self.beleg
+        return self.adapter_name + "_" + self.timestamp.isoformat() + "_" + self.beleg

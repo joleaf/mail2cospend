@@ -11,4 +11,5 @@ WORKDIR /app
 RUN uv sync --frozen
 VOLUME /app/data
 ENTRYPOINT ["uv", "run", "mail2cospend"]
+CMD ["run"]
 
