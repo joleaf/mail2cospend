@@ -18,7 +18,7 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/joleaf/mail2cospend
+Homepage = "https://github.com/joleaf/mail2cospend"
 Documentation = "https://github.com/joleaf/mail2cospend"
 Repository = "https://github.com/joleaf/mail2cospend"
 Issues = "https://github.com/joleaf/mail2cospend/issues"
