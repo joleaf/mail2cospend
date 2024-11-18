@@ -3,47 +3,34 @@
 A workflow for publishing eBons from mail to Cospend (App in Nextcloud).
 Uses [uv](https://github.com/astral-sh/uv) for Python project management.
 
-## Install requirements
+## Quick start
+
+### Install mail2cospend
 
 ```shell
-uv sync
-uv lock
+pip install mail2cospend
 ```
 
-## Run with Python >= 3.12
-
-```bash
-uv run mail2cospend run
+### Run the command
+```shell
+mail2cospend --help
 ```
 
-Use `dry-run` to perform a "dry run": only request and parse bon from the mail inbox without publishing them to cospend.
-
-If you want infos about your project (e.g., the available ids), run:
-
 ```
-uv run mail2cospend project-infos
-```
+Usage: mail2cospend [OPTIONS] COMMAND [ARGS]...
 
-If you want infos about your current config, run:
+Options:
+  --version  Show the version and exit.
+  --help     Show this message and exit.
 
-```
-uv run mail2cospend show-config
-```
-
-## Run with Docker
-
-```bash
-./build.sh
-./run.sh
+Commands:
+  dry-run        Dry run without publishing to the cospend server.
+  project-infos  Only print information about the cospend project...
+  run            Run the service.
+  show-config    Print the current config.         
 ```
 
-## Implemented adapters
-
-- Rewe
-- Netto
-- Picnic
-
-## Configuration with environment variables
+### Configuration with environment variables
 
 Change them in the [.env](.env) file.
 
@@ -69,3 +56,46 @@ Change them in the [.env](.env) file.
 | LOGLEVEL                        | The loglevel (DEBUG,INFO,WARING,ERROR)                                             | string             |
 
 ^1) Use the values of the adapter names: REWE, NETTO, PICNIC
+
+## Development
+1. Checkout this project
+2. Install requirements
+
+```shell
+uv sync
+uv lock
+```
+
+### Run with Python >= 3.12
+
+```bash
+uv run mail2cospend run
+```
+
+Use `dry-run` to perform a "dry run": only request and parse bon from the mail inbox without publishing them to cospend.
+
+If you want infos about your project (e.g., the available ids), run:
+
+```
+uv run mail2cospend project-infos
+```
+
+If you want infos about your current config, run:
+
+```
+uv run mail2cospend show-config
+```
+
+### Run with Docker
+
+```bash
+./build.sh
+./run.sh
+```
+
+### Implemented adapters
+
+- Rewe
+- Netto
+- Picnic
+
