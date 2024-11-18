@@ -27,7 +27,7 @@ class NettoSearchAdapter(SearchAdapter):
 
     @property
     def _search_query(self) -> str:
-        return f'(noreply@netto-app.de) (SUBJECT "Marken-Discount!") (SINCE "{self.config.get_since_for_imap_query()}")'
+        return f'(FROM noreply@netto-app.de) (SUBJECT "Marken-Discount!") (SINCE "{self.config.get_since_for_imap_query()}")'
 
     def _get_bon_from_pdf(self, pdf: PdfReader, email_timestamp: datetime) -> Optional[BonSummary]:
         return None
