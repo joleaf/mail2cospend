@@ -5,6 +5,10 @@ description = "Send summaries of eBons (Rewe, Netto, ..) to cospend."
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.12"
+authors = [
+    { name = "Jonas Blazz", email = "jonas@blatts.de" }
+]
+keywords = ["cospend", "imap", "workflow", "eBon"]
 dependencies = [
     "click>=8.1.7",
     "pypdf2>=3.0.1",
@@ -12,6 +16,12 @@ dependencies = [
     "pyyaml>=6.0.2",
     "requests>=2.32.3",
 ]
+
+[project.urls]
+Homepage = "https://github.com/joleaf/mail2cospend
+Documentation = "https://github.com/joleaf/mail2cospend"
+Repository = "https://github.com/joleaf/mail2cospend"
+Issues = "https://github.com/joleaf/mail2cospend/issues"
 
 [build-system]
 requires = ["hatchling"]
