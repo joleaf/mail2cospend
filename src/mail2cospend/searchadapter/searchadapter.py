@@ -39,6 +39,10 @@ class SearchAdapter(ABC):
     def _search_query(self) -> str:
         pass
 
+    @property
+    def _coding(self) -> str:
+        return 'utf-8'
+
     def search(self) -> List[BonSummary]:
         published_ids = get_published_ids()
         search_query = self._search_query
@@ -58,12 +62,12 @@ class SearchAdapter(ABC):
             bon = None
             for part in msg.walk():
                 if self._use_html_text_in_mail() and part.get_content_type() == 'text/html':
-                    payload = part.get_payload(decode=True).decode('utf-8').split("\r\n")
+                    payload = part.get_payload(decode=True).decode(self._coding).split("\r\n")
                     bon = self._get_bon_from_text(payload, email_timestamp, is_html=True)
                     if bon is None:
                         logging.warning("Bon can not be parsed")
                 if self._use_plain_text_in_mail() and part.get_content_type() == 'text/plain':
-                    payload = part.get_payload(decode=True).decode('latin-1').split("\r\n")
+                    payload = part.get_payload(decode=True).decode(self._coding).split("\r\n")
                     bon = self._get_bon_from_text(payload, email_timestamp, is_html=False)
                     if bon is None:
                         logging.warning("Bon can not be parsed")

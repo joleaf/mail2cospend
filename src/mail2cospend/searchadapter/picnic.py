@@ -27,7 +27,10 @@ class PicnicSearchAdapter(SearchAdapter):
 
     @property
     def _search_query(self) -> str:
-        return f'(SUBJECT "Dein Bon") (SINCE "{self.config.get_since_for_imap_query()}")'
+        return f'(FROM info@mail.picnic.de) (SUBJECT "Dein Bon") (SINCE "{self.config.get_since_for_imap_query()}")'
+
+    def _coding(self) -> str:
+        return 'latin-1'
 
     def _get_bon_from_pdf(self, pdf: PdfReader, email_timestamp: datetime) -> Optional[BonSummary]:
         return None
