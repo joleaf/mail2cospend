@@ -6,7 +6,7 @@ readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.12"
 authors = [
-    { name = "Jonas Blazz", email = "jonas@blatts.de" }
+    { name = "Jonas Blatt", email = "jonas@blatts.de" }
 ]
 keywords = ["cospend", "imap", "workflow", "eBon"]
 dependencies = [
