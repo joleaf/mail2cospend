@@ -6,8 +6,15 @@ from datetime import datetime
 class BonSummary:
     timestamp: datetime
     sum: float
-    beleg: str
+    document: str
     adapter_name: str
 
     def get_id(self):
-        return self.adapter_name + "_" + self.timestamp.isoformat() + "_" + self.beleg
+        return self.adapter_name + "_" + self.timestamp.isoformat() + "_" + self.document
+
+    def as_pretty_string(self, template: str) -> str:
+        return template \
+            .replace("{adapter}", self.adapter_name) \
+            .replace("{timestamp}", self.timestamp.strftime("%Y-%m-%d %H:%M:%S")) \
+            .replace("{document}", self.document) \
+            .replace("{sum}", f"{self.sum:.2f}")

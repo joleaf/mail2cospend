@@ -12,6 +12,7 @@ pip install mail2cospend
 ```
 
 ### Run the command
+
 ```shell
 mail2cospend --help
 ```
@@ -34,30 +35,35 @@ Commands:
 
 Change them in the [.env](.env) file.
 
-| Variable                        | Description                                                                        | Type               |
-|---------------------------------|------------------------------------------------------------------------------------|--------------------|
-| COSPEND_PROJECT_URL             | The url of the cospend project (shared link in the project)                        | string             |
-| COSPEND_PROJECT_PASSWORD        | The (optional) password of the cospend project (if set)                            | string             |
-| COSPEND_PAYED_FOR_DEFAULT       | The ids of the payed for users, seperated by a ","                                 | string             |
-| COSPEND_PAYED_FOR_{adapter}     | The ids of the payed for users, seperated by a "," for a specified *adapter* (^1)  | string             |
-| COSPEND_PAYER_DEFAULT           | The id of the payer                                                                | string             |
-| COSPEND_PAYER_{adapter}         | The id of the payer for a specified *adapter* (^1)                                 | string             |
-| COSPEND_CATEGORYID_DEFAULT      | The id of the category                                                             | string             |
-| COSPEND_CATEGORYID_{adapter}    | The id of the category for a specified *adapter* (^1)                              | string             |
-| COSPEND_PAYMENTMODEID_DEFAULT   | The id of the payment mode                                                         | string             |
-| COSPEND_PAYMENTMODEID_{adapter} | The id of the payment mode for a specified *adapter* (^1)                          | string             |
-| IMAP_HOST                       | The IMAP host                                                                      | string             |
-| IMAP_USER                       | The IMAP user                                                                      | string             |
-| IMAP_PASSWORD                   | The IMAP password                                                                  | string             |
-| IMAP_PORT                       | The IMAP port                                                                      | int (default: 993) |
-| IMAP_INBOX                      | 'Inbox' of of the IMAP server                                                      | string             |
-| SINCE                           | 'today' or a ISO date, if 'today', then the script will use always the current day | str or ISO date    |
-| INTERVAL                        | The request interval in seconds                                                    | int (default: 60)  |
-| LOGLEVEL                        | The loglevel (DEBUG,INFO,WARING,ERROR)                                             | string             |
+| Variable                        | Description                                                                                                                 | Type               |
+|---------------------------------|-----------------------------------------------------------------------------------------------------------------------------|--------------------|
+| COSPEND_PROJECT_URL             | The url of the cospend project (shared link in the project)                                                                 | string             |
+| COSPEND_PROJECT_PASSWORD        | The (optional) password of the cospend project (if set)                                                                     | string             |
+| COSPEND_PAYED_FOR_DEFAULT       | The ids of the payed for users, seperated by a ","                                                                          | string             |
+| COSPEND_PAYED_FOR_{adapter}     | The ids of the payed for users, seperated by a "," for a specified *adapter* (^1)                                           | string             |
+| COSPEND_PAYER_DEFAULT           | The id of the payer                                                                                                         | string             |
+| COSPEND_PAYER_{adapter}         | The id of the payer for a specified *adapter* (^1)                                                                          | string             |
+| COSPEND_CATEGORYID_DEFAULT      | The id of the category                                                                                                      | string             |
+| COSPEND_CATEGORYID_{adapter}    | The id of the category for a specified *adapter* (^1)                                                                       | string             |
+| COSPEND_PAYMENTMODEID_DEFAULT   | The id of the payment mode                                                                                                  | string             |
+| COSPEND_PAYMENTMODEID_{adapter} | The id of the payment mode for a specified *adapter* (^1)                                                                   | string             |
+| NTFY_URL                        | The url of the [ntfy](https://ntfy.sh/) server. If not set it is disabled.                                                  | string             |
+| NTFY_BEARER_AUTH_TOKEN          | The (optional) bearer auth token for the ntfy server.                                                                       | string             |
+| NTFY_TOPIC                      | The topic for the ntfy notifications.                                                                                       | string             |
+| NTFY_MESSAGE_TEMPLATE           | The message template for the ntfy notifications. Use the {adapter}/{document}/{timestamp}/{sum} variables in this template. | string             |
+| IMAP_HOST                       | The IMAP host                                                                                                               | string             |
+| IMAP_USER                       | The IMAP user                                                                                                               | string             |
+| IMAP_PASSWORD                   | The IMAP password                                                                                                           | string             |
+| IMAP_PORT                       | The IMAP port                                                                                                               | int (default: 993) |
+| IMAP_INBOX                      | 'Inbox' of of the IMAP server                                                                                               | string             |
+| SINCE                           | 'today' or a ISO date, if 'today', then the script will use always the current day                                          | str or ISO date    |
+| INTERVAL                        | The request interval in seconds                                                                                             | int (default: 60)  |
+| LOGLEVEL                        | The loglevel (DEBUG,INFO,WARING,ERROR)                                                                                      | string             |
 
 ^1) Use the values of the adapter names: REWE, NETTO, PICNIC, PLANTED
 
 ## Development
+
 1. Checkout this project
 2. Install requirements
 

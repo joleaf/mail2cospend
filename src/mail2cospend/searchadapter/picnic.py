@@ -42,5 +42,5 @@ class PicnicSearchAdapter(SearchAdapter):
         for row in payload:
             if "Gesamtbetrag" in row:
                 sum = float(row.split()[1].replace("..", "."))
-        bon = BonSummary(sum=sum, beleg="", timestamp=email_timestamp, adapter_name=self.adapter_name())
+        bon = BonSummary(sum=sum, document="", timestamp=email_timestamp, adapter_name=self.adapter_name())
         return bon

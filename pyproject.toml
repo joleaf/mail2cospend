@@ -8,7 +8,7 @@ requires-python = ">=3.12"
 authors = [
     { name = "Jonas Blatt", email = "jonas@blatts.de" }
 ]
-keywords = ["cospend", "imap", "workflow", "eBon"]
+keywords = ["cospend", "imap", "workflow", "eBon", "ntfy"]
 dependencies = [
     "click>=8.1.7",
     "pypdf2>=3.0.1",

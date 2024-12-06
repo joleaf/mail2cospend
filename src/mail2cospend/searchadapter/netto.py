@@ -43,5 +43,5 @@ class NettoSearchAdapter(SearchAdapter):
             if found_summe:
                 sum = float(row.split("<b>")[1].split(" ")[0].replace(",", "."))
                 break
-        bon = BonSummary(sum=sum, beleg="", timestamp=email_timestamp, adapter_name=self.adapter_name())
+        bon = BonSummary(sum=sum, document="", timestamp=email_timestamp, adapter_name=self.adapter_name())
         return bon

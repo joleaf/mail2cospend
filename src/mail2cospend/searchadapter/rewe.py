@@ -43,7 +43,7 @@ class ReweSearchAdapter(SearchAdapter):
         beleg = datarow[2]
         timestamp = datetime.datetime(year=year, month=month, day=day, hour=hour, minute=minute)
 
-        bon = BonSummary(sum=sum, beleg=beleg, timestamp=timestamp, adapter_name=self.adapter_name())
+        bon = BonSummary(sum=sum, document=beleg, timestamp=timestamp, adapter_name=self.adapter_name())
         return bon
 
     def _get_bon_from_text(self, payload: Iterable[str], email_timestamp: datetime, is_html: bool) -> Optional[

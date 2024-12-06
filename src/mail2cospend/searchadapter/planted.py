@@ -44,5 +44,5 @@ class PlantedSearchAdapter(SearchAdapter):
             elif found_total and len(row) > 0:
                 sum = float(row.split()[0].replace(",", "."))
                 break
-        bon = BonSummary(sum=sum, beleg="", timestamp=email_timestamp, adapter_name=self.adapter_name())
+        bon = BonSummary(sum=sum, document="", timestamp=email_timestamp, adapter_name=self.adapter_name())
         return bon

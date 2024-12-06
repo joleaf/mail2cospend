@@ -70,7 +70,7 @@ def publish_bongs(bons: List[BonSummary], config: Config):
             break
         except:
             logging.error("No connection to the cospend server.")
-            seconds_to_wait = config.interval * 2**i
+            seconds_to_wait = config.interval * 2 ** i
             logging.error(
                 f"Waiting {seconds_to_wait} seconds for the next try. ({i}/{tries})"
             )
@@ -121,13 +121,16 @@ def _try_publish_bons(bons: List[BonSummary], config: Config):
             'timestamp': (bon.timestamp - datetime.datetime(1970, 1, 1)).total_seconds(),
             'categoryid': config.get_cospend_categoryid(bon.adapter_name),
             'paymentmodeid': config.get_cospend_paymentmodeid(bon.adapter_name),
-            'comment': bon.adapter_name + ' - Autopush ' + (('- Beleg: ' + bon.beleg) if bon.beleg else '')
+            'comment': bon.adapter_name + ' - Autopush ' + (('- Beleg: ' + bon.document) if bon.document else '')
         }
         logging.debug(f"Sending data: {str(data)} to url {url}")
         result = requests.post(url, json=data)
         if result.status_code < 400:
             add_published_id(bon)
             logging.debug(f"Published bon {bon} and added to published file")
+            if config.ntfy_is_enabled:
+                config.get_ntfy_client().publish_bon_summary(bon)
+
         else:
             logging.warning(f"Bon {bon} was not published to cospend!")
             logging.warning(f"{result.status_code}: {result.reason}")

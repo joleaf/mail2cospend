@@ -8,6 +8,7 @@ from typing import Optional, Dict
 
 from dotenv import load_dotenv
 
+from mail2cospend.ntfy import Ntfy
 from mail2cospend.searchadapter import all_search_adapters, SearchAdapter
 
 
@@ -20,6 +21,10 @@ class Config:
     cospend_payer_default: Optional[str]
     cospend_categoryid_default: Optional[str]
     cospend_paymentmodeid_default: Optional[str]
+    ntfy_url: Optional[str]
+    ntfy_bearer_auth_token: Optional[str]
+    ntfy_topic: str
+    ntfy_message_template: str
     imap_host: str
     imap_user: str
     imap_password: str
@@ -59,6 +64,13 @@ class Config:
         else:
             since_dt = datetime.datetime.fromisoformat(self.since)
         return since_dt.strftime("%d-%b-%Y")
+
+    @property
+    def ntfy_is_enabled(self):
+        return self.ntfy_url is not None and self.ntfy_url != ""
+
+    def get_ntfy_client(self) -> Ntfy:
+        return Ntfy(self.ntfy_url, self.ntfy_topic, self.ntfy_message_template, self.ntfy_bearer_auth_token)
 
 
 def load_config(exit_event: Event) -> Config:
@@ -107,7 +119,11 @@ def load_config(exit_event: Event) -> Config:
         cospend_payed_for=cospend_payed_for_adapter,
         cospend_payer=cospend_payer_adapter,
         cospend_categoryids=cospend_categoryid_adapter,
-        cospend_paymentmodeids=cospend_paymentmodeid_adapter
+        cospend_paymentmodeids=cospend_paymentmodeid_adapter,
+        ntfy_url=os.environ.get('NTFY_URL'),
+        ntfy_bearer_auth_token=os.environ.get('NTFY_BEARER_AUTH_TOKEN'),
+        ntfy_topic=os.environ.get('NTFY_TOPIC') or "mail2cospend",
+        ntfy_message_template=os.environ.get('NTFY_MESSAGE_TEMPLATE') or "{sum}€ {adapter}/{document} ({timestamp})",
     )
 
     return config
