@@ -3,7 +3,7 @@ import datetime
 import enum
 import logging
 from dataclasses import field
-from typing import List
+from typing import List, Dict
 
 import requests
 
@@ -13,10 +13,37 @@ from mail2cospend.helper import add_published_id
 
 
 @dataclasses.dataclass(frozen=True)
+class Member:
+    id: int
+    activated: bool
+    color: str
+    name: str
+    weight: float
+
+
+@dataclasses.dataclass(frozen=True)
+class Category:
+    id: int
+    color: str
+    icon: str
+    name: str
+    order: int
+
+
+@dataclasses.dataclass(frozen=True)
+class PaymentMode:
+    id: int
+    color: str
+    icon: str
+    name: str
+    order: int
+
+
+@dataclasses.dataclass(frozen=True)
 class CospendProjectInfos:
-    categories: List[str] = field(default_factory=list)
-    paymentmodes: List[str] = field(default_factory=list)
-    members: List[str] = field(default_factory=list)
+    categories: Dict[int, Category] = field(default_factory=dict)
+    paymentmodes: Dict[int, PaymentMode] = field(default_factory=dict)
+    members: Dict[int, Member] = field(default_factory=dict)
 
 
 def test_connection(config: Config):
@@ -45,17 +72,20 @@ def get_cospend_project_infos(config: Config) -> CospendProjectInfos:
     result = requests.get(url)
     data = result.json()
 
-    categories = list()
+    categories = dict()
     for key, val in data["categories"].items():
-        categories.append(f"{key}: {val['name']}")
+        categories[key] = Category(id=val["id"], color=val["color"], icon=val["icon"], name=val["name"],
+                                   order=val["order"])
 
-    paymentmodes = list()
+    paymentmodes = dict()
     for key, val in data["paymentmodes"].items():
-        paymentmodes.append(f"{key}: {val['name']}")
+        paymentmodes[key] = PaymentMode(id=val["id"], color=val["color"], icon=val["icon"], name=val["name"],
+                                        order=val["order"])
 
-    members = list()
+    members = dict()
     for member in data["members"]:
-        members.append(f"{member['id']}: {member['name']}")
+        members[member['id']] = Member(id=member["id"], activated=member["activated"], color=member["color"],
+                                       name=member["name"], weight=member["weight"])
 
     return CospendProjectInfos(categories, paymentmodes, members)
 

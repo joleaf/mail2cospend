@@ -54,17 +54,18 @@ def run(dry=False):
 def print_cospend_project_infos():
     config = _init()
     project_infos = get_cospend_project_infos(config)
-    logging.info("Categories  (Used for  COSPEND_CATEGORYID_... )")
-    logging.info("----------")
-    for val in project_infos.categories:
-        logging.info(f"  - {val}")
-    logging.info("")
-    logging.info("Payment Modes  (Used for  COSPEND_PAYMENTMODEID_... )")
-    logging.info("-------------")
-    for val in project_infos.paymentmodes:
-        logging.info(f"  - {val}")
-    logging.info("")
-    logging.info("Members  (Used for  COSPEND_PAYED_FOR_...  (multiple seperated by a ',') and  COSPEND_PAYER_... )")
-    logging.info("-------")
-    for val in project_infos.members:
-        logging.info(f"  - {val}")
+    print("Categories  (Used for  COSPEND_CATEGORYID_... )")
+    print("----------")
+    for key, val in project_infos.categories.items():
+        print(f"  - {key}: {val.name} {val.icon}")
+    print("")
+    print("Payment Modes  (Used for  COSPEND_PAYMENTMODEID_... )")
+    print("-------------")
+    for key, val in project_infos.paymentmodes.items():
+        print(f"  - {key}: {val.name} {val.icon}")
+    print("")
+    print("Members  (Used for  COSPEND_PAYED_FOR_...  (multiple seperated by a ',') and  COSPEND_PAYER_... )")
+    print("-------")
+    for key, val in project_infos.members.items():
+        print(f"  - {key}: {val.name}")
+
