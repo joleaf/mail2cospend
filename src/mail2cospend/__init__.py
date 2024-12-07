@@ -1,3 +1,4 @@
+import datetime
 import logging
 import signal
 from pprint import pformat
@@ -5,7 +6,7 @@ from pprint import pformat
 import click
 
 from mail2cospend.config import load_config
-from mail2cospend.main import run as main_run, exit_event, print_cospend_project_infos
+from mail2cospend.main import run as main_run, exit_event, print_cospend_project_infos, print_cospend_project_statistics
 
 
 def quit(signo, _frame):
@@ -25,6 +26,22 @@ def cli():
     help='Only print information about the cospend project (Category, Payer IDs, Payment mode,..) and then exit the program.')
 def project_infos():
     print_cospend_project_infos()
+
+
+@cli.command(
+    help='Print statistics for your cospend project for the provided year-month (Format: YYYY-MM). The value can also be "current" or "last".')
+@click.argument('year-month')
+def project_statistics(year_month: str):
+    if year_month.lower() == "current":
+        year_month = datetime.date.today().strftime("%Y-%m")
+    if year_month.lower() == "last":
+        year, mon = map(int, datetime.date.today().strftime("%Y-%m").split("-"))
+        mon -= 1
+        if mon == 0:
+            mon = 12
+            year -= 1
+        year_month = f"{year}-{mon}"
+    print_cospend_project_statistics(year_month)
 
 
 @cli.command(help='Run the service. Request the bons and publish them to the server.')
