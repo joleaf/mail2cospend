@@ -1,8 +1,10 @@
 import logging
 from threading import Event
+from typing import Optional, Dict, List
 
 from mail2cospend.config import load_config, Config
-from mail2cospend.cospendconnector import publish_bongs, test_connection, get_cospend_project_infos
+from mail2cospend.cospendconnector import publish_bongs, test_connection, get_cospend_project_infos, \
+    get_cospend_project_statistics, CospendProjectInfos
 from mail2cospend.mailconnector import get_imap_connection
 from mail2cospend.searchadapter import all_search_adapters
 
@@ -71,3 +73,63 @@ def print_cospend_project_infos():
     print("-------")
     for key, val in project_infos.members.items():
         print(f"  - {key}: {val.name}")
+
+
+def print_cospend_project_statistics(year_month: Optional[str] = None):
+    config = _init()
+    logging.error(year_month)
+    if year_month is None:
+        year_month = datetime.now().strftime("%Y-%m")
+    project_statistics = get_cospend_project_statistics(config, year_month)
+    project_infos = get_cospend_project_infos(config)
+    result_string = _get_cospend_project_one_month_statistics_strings(project_statistics, project_infos, year_month)
+    for line in result_string:
+        print(line)
+
+
+def _get_cospend_project_one_month_statistics_strings(project_statistics: Dict,
+                                                      project_infos: CospendProjectInfos,
+                                                      year_month: str,
+                                                      print_icons: bool = False,
+                                                      add_bar=True) -> List[str]:
+    result = []
+    pprint.pprint(project_statistics)
+    result.append(f"Statistics for {year_month}")
+    result.append("")
+    result.append("Categories")
+    result.append("----------")
+    maxVal = max(
+        val.get(year_month, 0) for key, val in project_statistics['categoryMonthlyStats'].items() if
+        project_infos.categories.get(key))
+    for key, val in project_statistics['categoryMonthlyStats'].items():
+        if project_infos.categories.get(key):
+            val = val.get(year_month, 0)
+            if val > 0:
+                ico_s = ""
+                if print_icons:
+                    ico_s = f" {project_infos.categories[key].icon}"
+                result.append(
+                    f" -{ico_s} {project_infos.categories[key].name:<40}: {val:9.2f}€")
+                if add_bar:
+                    result[-1] += "  |" + ("#" * (int((val / maxVal) * 40))) + (
+                                " " * (40 - int((val / maxVal) * 40))) + "|"
+    result.append("")
+    result.append("Payment Modes")
+    result.append("-------------")
+    maxVal = max(
+        val.get(year_month, 0) for key, val in project_statistics['paymentModeMonthlyStats'].items() if
+        project_infos.paymentmodes.get(key))
+    for key, val in project_statistics['paymentModeMonthlyStats'].items():
+        if project_infos.paymentmodes.get(key):
+            val = val.get(year_month, 0)
+            if val > 0:
+                ico_s = ""
+                if print_icons:
+                    ico_s = f" {project_infos.paymentmodes[key].icon}"
+                result.append(
+                    f" -{ico_s} {project_infos.paymentmodes[key].name:<40}: {val:9.2f}€")
+                if add_bar:
+                    result[-1] += "  |" + ("#" * (int((val / maxVal) * 40))) + (
+                                " " * (40 - int((val / maxVal) * 40))) + "|"
+
+    return result

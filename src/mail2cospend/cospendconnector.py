@@ -1,5 +1,6 @@
 import dataclasses
 import datetime
+import calendar
 import enum
 import logging
 from dataclasses import field
@@ -67,6 +68,24 @@ def test_connection(config: Config):
         return False
 
 
+def get_cospend_project_statistics(config: Config, year_month: str):
+    url = _get_project_url(config, ApiType.STATISTICS)
+    try:
+        year_mon = year_month.split("-")
+        year = int(year_mon[0])
+        mon = int(year_mon[1])
+        tsMin = int(datetime.datetime(year, mon, 1,hour=0, minute=0, second=0).timestamp()) - 50000000
+        tsMax = int(datetime.datetime(year, mon, calendar.monthrange(year, mon)[1], 23, 59, 59).timestamp()) + 20000
+    except:
+        logging.error(f"Wrong year-month format, should be YYYY-MM, was {year_month}")
+        config.exit_event.set()
+        exit(1)
+    query = f"?{tsMin=}&{tsMax=}"
+    result = requests.get(url + query)
+    data = result.json()
+    return data
+
+
 def get_cospend_project_infos(config: Config) -> CospendProjectInfos:
     url = _get_project_url(config, ApiType.INFOS)
     result = requests.get(url)
@@ -112,6 +131,7 @@ def publish_bongs(bons: List[BonSummary], config: Config):
 class ApiType(enum.Enum):
     BILLS = 1
     INFOS = 2
+    STATISTICS = 3
 
 
 def _get_project_url(config: Config, api_type: ApiType) -> str:
@@ -126,11 +146,15 @@ def _get_project_url(config: Config, api_type: ApiType) -> str:
     if pw is not None and len(pw) > 0:
         if api_type == ApiType.BILLS:
             url += f"{pw}/bills"
+        elif api_type == ApiType.STATISTICS:
+            url += f"{pw}/statistics"
         elif api_type == ApiType.INFOS:
             url += f"{pw}"
     else:
         if api_type == ApiType.BILLS:
             url += "no-pass/bills"
+        elif api_type == ApiType.STATISTICS:
+            url += "no-pass/statistics"
         elif api_type == ApiType.INFOS:
             url += "members"
     return url
