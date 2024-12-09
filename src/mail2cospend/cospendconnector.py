@@ -153,7 +153,7 @@ def _try_publish_bons(bons: List[BonSummary], config: Config):
             'paymentmodeid': config.get_cospend_paymentmodeid(bon.adapter_name),
             'comment': bon.adapter_name + ' - Autopush ' + (('- Beleg: ' + bon.document) if bon.document else '')
         }
-        logging.debug(f"Sending data: {str(data)} to url {url}")
+        logging.debug(f"Publishing data: {str(data)} to url {url}")
         result = requests.post(url, json=data)
         if result.status_code < 400:
             add_published_id(bon)

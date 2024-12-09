@@ -42,4 +42,4 @@ def run(dry=False):
 @cli.command(help='Print the current config.')
 def show_config():
     config = load_config(None)
-    logging.info(pformat(config))
+    click.echo(pformat(config))

@@ -1,6 +1,8 @@
 import logging
 from threading import Event
 
+import click
+
 from mail2cospend.config import load_config, Config
 from mail2cospend.cospendconnector import publish_bongs, test_connection, get_cospend_project_infos
 from mail2cospend.mailconnector import get_imap_connection
@@ -57,17 +59,17 @@ def run(dry=False):
 def print_cospend_project_infos():
     config = _init()
     project_infos = get_cospend_project_infos(config)
-    print("Categories  (Used for  COSPEND_CATEGORYID_... )")
-    print("----------")
+    click.echo("Categories  (Used for  COSPEND_CATEGORYID_... )")
+    click.echo("----------")
     for key, val in project_infos.categories.items():
-        print(f"  - {key}: {val.name} {val.icon}")
-    print("")
-    print("Payment Modes  (Used for  COSPEND_PAYMENTMODEID_... )")
-    print("-------------")
+        click.echo(f"  - {key}: {val.name} {val.icon}")
+    click.echo("")
+    click.echo("Payment Modes  (Used for  COSPEND_PAYMENTMODEID_... )")
+    click.echo("-------------")
     for key, val in project_infos.paymentmodes.items():
-        print(f"  - {key}: {val.name} {val.icon}")
-    print("")
-    print("Members  (Used for  COSPEND_PAYED_FOR_...  (multiple seperated by a ',') and  COSPEND_PAYER_... )")
-    print("-------")
+        click.echo(f"  - {key}: {val.name} {val.icon}")
+    click.echo("")
+    click.echo("Members  (Used for  COSPEND_PAYED_FOR_...  (multiple seperated by a ',') and  COSPEND_PAYER_... )")
+    click.echo("-------")
     for key, val in project_infos.members.items():
-        print(f"  - {key}: {val.name}")
+        click.echo(f"  - {key}: {val.name}")
