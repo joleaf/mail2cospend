@@ -1,6 +1,7 @@
 import email
 import imaplib
 import logging
+import os
 from abc import ABC, abstractmethod
 from datetime import datetime
 from email import utils
@@ -93,6 +94,7 @@ class SearchAdapter(ABC):
                             bon = self._get_bon_from_pdf(pdf, email_timestamp)
                         except:
                             pass
+                        os.remove(filename)
                         if bon is None:
                             logging.warning("Bon can not be parsed")
                 if bon is not None:
