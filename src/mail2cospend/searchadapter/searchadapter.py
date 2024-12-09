@@ -71,7 +71,11 @@ class SearchAdapter(ABC):
                     bon = self._get_bon_from_text(payload, email_timestamp, is_html=False)
                     if bon is None:
                         logging.warning("Bon can not be parsed")
-                if self._use_pdf_in_mail() and part.get_content_type() == 'application/octet-stream':
+                if (self._use_pdf_in_mail()
+                        and (
+                                part.get_content_type() == 'application/octet-stream'
+                                or part.get_content_type() == 'application/pdf'
+                        )):
 
                     # When decode=True, get_payload will return None if part.is_multipart()
                     # and the decoded content otherwise.

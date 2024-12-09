@@ -60,7 +60,7 @@ Change them in the [.env](.env) file.
 | INTERVAL                        | The request interval in seconds                                                                                             | int (default: 60)  |
 | LOGLEVEL                        | The loglevel (DEBUG,INFO,WARING,ERROR)                                                                                      | string             |
 
-^1) Use the values of the adapter names: REWE, NETTO, PICNIC, PLANTED
+^1) Use the values of the adapter names: REWE, NETTO, PICNIC, PLANTED, EDEKA, IKEA
 
 ## Development
 
@@ -105,4 +105,6 @@ uv run mail2cospend show-config
 - Netto
 - Picnic
 - Planted
+- Edeka
+- Ikea
 
