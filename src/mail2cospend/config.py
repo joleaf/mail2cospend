@@ -37,6 +37,7 @@ class Config:
     cospend_payer: Dict[str, str] = field(default_factory=dict)
     cospend_categoryids: Dict[str, str] = field(default_factory=dict)
     cospend_paymentmodeids: Dict[str, str] = field(default_factory=dict)
+    adapter_enabled: Dict[str, bool] = field(default_factory=dict)
 
     def get_cospend_payed_for(self, adapter: SearchAdapter | str) -> str:
         if isinstance(adapter, SearchAdapter):
@@ -57,6 +58,11 @@ class Config:
         if isinstance(adapter, SearchAdapter):
             adapter = adapter.adapter_name()
         return self.cospend_paymentmodeids.get(adapter) or self.cospend_paymentmodeid_default
+
+    def is_adapter_enabled(self, adapter: SearchAdapter | str) -> bool:
+        if isinstance(adapter, SearchAdapter):
+            adapter = adapter.adapter_name()
+        return self.adapter_enabled.get(adapter)
 
     def get_since_for_imap_query(self):
         if self.since == "today":
@@ -91,6 +97,15 @@ def load_config(exit_event: Event) -> Config:
     cospend_categoryid_adapter = _try_load_adapter_config('CATEGORYID', cospend_categoryid_default)
     cospend_paymentmodeid_default = os.environ.get('COSPEND_PAYMENTMODEID_DEFAULT')
     cospend_paymentmodeid_adapter = _try_load_adapter_config('PAYMENTMODEID', cospend_categoryid_default)
+    adapter_enabled = dict()
+    for adapter in all_search_adapters:
+        full_key = f"ADAPTER_{adapter.adapter_name().upper()}_ENABLED"
+        value = os.environ.get(full_key)
+        if value:
+            value = value.lower() not in "false,0,disabled,off".split(",")
+        else:
+            value = True
+        adapter_enabled[adapter.adapter_name()] = value
 
     since = os.environ.get('SINCE') or 'today'
     if since != "today":
@@ -124,6 +139,7 @@ def load_config(exit_event: Event) -> Config:
         ntfy_bearer_auth_token=os.environ.get('NTFY_BEARER_AUTH_TOKEN'),
         ntfy_topic=os.environ.get('NTFY_TOPIC') or "mail2cospend",
         ntfy_message_template=os.environ.get('NTFY_MESSAGE_TEMPLATE') or "{sum}€ {adapter}/{document} ({timestamp})",
+        adapter_enabled=adapter_enabled,
     )
 
     return config

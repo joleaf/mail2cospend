@@ -19,8 +19,10 @@ def _init() -> Config:
 
 def run(dry=False):
     config = _init()
+    logging.debug("Enabled adapters:")
     for adapter in all_search_adapters:
-        logging.debug(f"  - {adapter.adapter_name()}")
+        if config.is_adapter_enabled(adapter.adapter_name()):
+            logging.debug(f"  - {adapter.adapter_name()}")
 
     while not exit_event.is_set():
         imap = get_imap_connection(config)
@@ -29,10 +31,11 @@ def run(dry=False):
 
         bons = list()
         for Adapter_cls in all_search_adapters:
-            adapter = Adapter_cls(config, imap)
-            this_bons = adapter.search()
-            bons += this_bons
-            imap.close()
+            if config.is_adapter_enabled(Adapter_cls.adapter_name()):
+                adapter = Adapter_cls(config, imap)
+                this_bons = adapter.search()
+                bons += this_bons
+                imap.close()
         imap.shutdown()
 
         if exit_event.is_set():
@@ -68,4 +71,3 @@ def print_cospend_project_infos():
     print("-------")
     for key, val in project_infos.members.items():
         print(f"  - {key}: {val.name}")
-

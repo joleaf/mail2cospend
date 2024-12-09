@@ -46,6 +46,7 @@ Change them in the [.env](.env) file.
 | COSPEND_CATEGORYID_{adapter}    | The id of the category for a specified *adapter* (^1)                                                                       | string             |
 | COSPEND_PAYMENTMODEID_DEFAULT   | The id of the payment mode                                                                                                  | string             |
 | COSPEND_PAYMENTMODEID_{adapter} | The id of the payment mode for a specified *adapter* (^1)                                                                   | string             |
+| ADAPTER_{adapter}_ENABLED       | Enable or diable the specified *adapter* (^1), default is TRUE                                                              | boolean            |
 | NTFY_URL                        | The url of the [ntfy](https://ntfy.sh/) server. If not set it is disabled.                                                  | string             |
 | NTFY_BEARER_AUTH_TOKEN          | The (optional) bearer auth token for the ntfy server.                                                                       | string             |
 | NTFY_TOPIC                      | The topic for the ntfy notifications.                                                                                       | string             |
