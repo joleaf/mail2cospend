@@ -25,7 +25,6 @@ Options:
   --help     Show this message and exit.
 
 Commands:
-  dry-run        Dry run without publishing to the cospend server.
   project-infos  Only print information about the cospend project...
   run            Run the service.
   show-config    Print the current config.         
@@ -78,7 +77,7 @@ uv lock
 uv run mail2cospend run
 ```
 
-Use `dry-run` to perform a "dry run": only request and parse bon from the mail inbox without publishing them to cospend.
+Use `--dry` to perform a "dry run": only request and parse bon from the mail inbox without publishing them to cospend.
 
 If you want infos about your project (e.g., the available ids), run:
 

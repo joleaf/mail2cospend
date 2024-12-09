@@ -28,13 +28,15 @@ def project_infos():
 
 
 @cli.command(help='Run the service. Request the bons and publish them to the server.')
-def run():
-    main_run()
-
-
-@cli.command(help='Dry run without publishing to the cospend server.')
-def dry_run():
-    main_run(dry=True)
+@click.option(
+    '--dry',
+    '-d',
+    is_flag=True,
+    default=False,
+    help='Do not actually do anything. Just print out possible new bons without publishing them.',
+)
+def run(dry=False):
+    main_run(dry=dry)
 
 
 @cli.command(help='Print the current config.')
